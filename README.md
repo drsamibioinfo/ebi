@@ -172,6 +172,38 @@ if __name__ == '__main__':
 
 ```
 
+#### Question 2: How to write a test case for the above XML task ?
+
+There are two strategies. These two strategies require predefined result matrix (Truth matrix) to compare the output with it 
+but they differ on the assertion method used.
+
+Both strategies require that the predefined test matrix  and the output matrix to be sorted in the same manner.
+
+- The first strategy would be to loop over each row in both the truth matrix and the result matrix  and test whether the two numbers equal, if they equal set the current item to True otherwise False.
+then check if all items are true in the resulting list for each row or not. If all are True, then assertion succeeds otherwise False. 
+```python 
+[[2, 1, 1, 0], [1, 3, 1, 1], [1, 1, 2, 0], [0, 1, 0, 1]]
+``` 
+- The second strategy is an easier and more efficient one. in this method, we will use `numpy` package and test for equality using `np.equal` coupled with `np.all`.
+
+for instance, something like this
+
+```python
+import numpy as np
+
+truth = [[2, 1, 1, 0], [1, 3, 1, 1], [1, 1, 2, 0], [0, 1, 0, 1]]
+outcome = [[2, 1, 1, 0], [1, 3, 1, 1], [1, 1, 2, 0], [0, 1, 0, 1]]
+
+truth_matrix = np.matrix(truth)
+outcome_matrix = np.matrix(outcome)
+assert np.all(np.equal(truth_matrix,outcome_matrix))
+```
+
+#### Question 3: Scaling out XML task....
+
+The problem is XML is a very verbose Text markup language. To this end, to represent 22 million articles using XML, the resulting file will be very huge to be read fully in memory at once to begin parsing it as we did in this example.
+
+
 
 
 

@@ -38,6 +38,7 @@ def main():
     # get the author names and sort them chronologically
     author_names = sorted(list(authors.keys()))
     rows = []
+    raw = []
     for i in range(len(author_names)):
         row = [0] * len(author_names)
         first_set = authors[author_names[i]]
@@ -46,9 +47,20 @@ def main():
             # get the length of the intersection between the two authors' articles
             row[j] = len(set(first_set) & set(second_set))
         rows.append([author_names[i]] + row)
+        raw.append(row)
+    print(raw)
     table = tabulate(rows,headers=["..."]+author_names,tablefmt="fancy_grid")
     print(table)
 
+import numpy as np
+
+truth = [[2, 1, 1, 0], [1, 3, 1, 1], [1, 1, 2, 0], [0, 1, 0, 1]]
+outcome = [[2, 1, 1, 0], [1, 3, 1, 1], [1, 1, 2, 0], [0, 1, 0, 1]]
+
+truth_matrix = np.matrix(truth)
+outcome_matrix = np.matrix(outcome)
+
+assert np.all(np.equal(truth_matrix,outcome_matrix))
 
 
 if __name__ == '__main__':

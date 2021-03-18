@@ -55,7 +55,7 @@ def findGroupA(network: Mapping[str,list], employer: Mapping[str, str]) -> []:
 
 ## DevOps
 
-#### What is the difference between a VM and a container ?
+#### Question 1 : What is the difference between a VM and a container ?
 
 VM stands for Virtual machine, it is a type of machine virtualization in which we are able to run multiple operating systems either directly 
 on bare-metal hardware or on top of a suitable guest Operating System. It requires a special type of software called "Hypervisor" that 
@@ -64,9 +64,52 @@ it is installed directly on the hardware i.e: Hyper-V; Type-2 hypervisor which r
 
 
 Each VM, is a completely isolated environment with its own host OS + user space libraries + installed apps. VM technology was introduced 
-to better utilize system resources but it introduced many management bottlenecks for system administrators and didn't completely solve 
+to better utilize system resources but it introduced redundancy , consumed more storage and many management bottlenecks for system administrators and didn't completely solve 
 the problem of scientific reproducibility (i.e. in Bioinformatics) 
 due to numerical instability among different software libraries versions. for this, operating system virtualization was introduced.
 
-A container: 
+A container is a lightweight virtualization in which it requires a suitable host operating system to provide isolation as well as 
+common system capabilities (kernel). Linux has introduced the concept of namespaces which led to spawning of containers technology. 
+a linux namespace is an isolated micro-environment within the operating system with its own file system, memory and processes space.
+
+A container only shares kernel with the host operating system but provides virtualization for file system , memory and processes; 
+besides, other system and user-space libraries in addition 
+to the main running application(s). It requires only a container daemon service which manages different containers.
+
+i.e. Docker and Singularity (the most common)
+
+
+#### Question 2 : gocd,cfengine, ansible and puppet ?
+
+gocd: I didn't use this tool before. but I have used a similar one called "Jenkins" and bitbucket pipelining feature. These are tools that 
+help us as software developers to continuously test our software as it being built and deploy it on different deployment environments.
+
+cfengine: I didn't use this tool before.
+
+ansible and puppet are decentralized configuration management tools which help deploying software tools and 
+dependent system libraries across many servers and/or cloud infrastructure all at once.
+
+I have used ansible before as it is built in python and it integrates seamlessly with our internal python systems.
+We have used it to deploy updated versions of the software and its related dependencies through a single configuration file and pushing 
+that to all running cloud EC2 instances all at once. 
+
+
+#### Question 3: Give 3 easy wins to reduce AWS compute costs ? 
+
+From my experience, These are some of the quick wins that could reduce AWS compute costs substantially.
+
+-  Utilizing cost management interface to determine low-utilized EC2 instances by averaging out the peaks of hyperactivities 
+to determine the right sizing for that particular EC2 instance and probably down-sizing it, I have utilized AWS toolkit in python and I have wrote a simple python daemonized script that performs these kind of tasks.
+
+- Moving infrequently accessed data to AWS Glacier instead of S3 this substantially reduces AWS cost.
+
+- Use Spot instances for fault-tolerant or short computing tasks.
+
+I had some experiences monitoring my own AWS Cloud for one of my personal projects, I have used ganglia + Grafana to monitor and visualize my 7 cloud EC2 instances.
+
+
+
+
+
+
 

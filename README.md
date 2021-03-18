@@ -174,26 +174,15 @@ if __name__ == '__main__':
 
 #### Question 2: How to write a test case for the above XML task ?
 
-There are two strategies. These two strategies require predefined result matrix (Truth matrix) to compare the output with it 
-but they differ on the assertion method used.
-
-Both strategies require that the predefined test matrix  and the output matrix to be sorted in the same manner.
-
-- The first strategy would be to loop over each row in both the truth matrix and the result matrix  and test whether the two numbers equal, if they equal set the current item to True otherwise False.
-then check if all items are true in the resulting list for each row or not. If all are True, then assertion succeeds otherwise False. 
-```python 
-[[2, 1, 1, 0], [1, 3, 1, 1], [1, 1, 2, 0], [0, 1, 0, 1]]
-``` 
-- The second strategy is an easier and more efficient one. in this method, we will use `numpy` package and test for equality using `np.equal` coupled with `np.all`.
+We will use `numpy` package and test for equality using `np.equal` coupled with `np.all` between the truth matrix (predefined as input) and the resulting matrix from the method `get_matrix_result`
 
 for instance, something like this
 
 ```python
 import numpy as np
-
+xml_file = "articles.xml"
 truth = [[2, 1, 1, 0], [1, 3, 1, 1], [1, 1, 2, 0], [0, 1, 0, 1]]
-outcome = [[2, 1, 1, 0], [1, 3, 1, 1], [1, 1, 2, 0], [0, 1, 0, 1]]
-
+outcome = get_matrix_result(xml_file)
 truth_matrix = np.matrix(truth)
 outcome_matrix = np.matrix(outcome)
 assert np.all(np.equal(truth_matrix,outcome_matrix))
@@ -201,7 +190,17 @@ assert np.all(np.equal(truth_matrix,outcome_matrix))
 
 #### Question 3: Scaling out XML task....
 
-The problem is XML is a very verbose Text markup language. To this end, to represent 22 million articles using XML, the resulting file will be very huge to be read fully in memory at once to begin parsing it as we did in this example.
+The problem is XML is a very verbose Text markup. 
+To this end, to represent 22 million articles using XML, the resulting file will be very huge to be read fully in memory at once to begin parsing it as we did in the previous example.
+
+Instead, We can utilize some distributed solutions like Hadoop and/or Apache Spark which help in distributing the processing of large XML file into multiple mappers and reducers.
+
+- In Apache Spark, we can either define a XSD schema to our input XML in order to overcome reading the whole file at once to infer the schema or 
+we can utilize "SamplingRatio" which accepts a float between [0,1] to read parts of the file and infer its schema in chunks in case, we don't have a schema for this XML structure.
+
+- There is another manual elaborate approach to solve this problem that runs in a single computer, In my case, I would implement my own SAX  parser in python in which, we read chunks of (4) bytes from the file in each iteration 
+and saves the string in memory and concatenate it with other iterations, then we search for `<Article>` and `</Article>` and keep track of the XML nested Levels and discard the whole data in memory, 
+if we finished processing the current article
 
 
 

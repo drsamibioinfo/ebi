@@ -99,7 +99,8 @@ that to all running cloud EC2 instances all at once.
 From my experience, These are some of the quick wins that could reduce AWS compute costs substantially.
 
 -  Utilizing cost management interface to determine low-utilized EC2 instances by averaging out the peaks of hyperactivities 
-to determine the right sizing for that particular EC2 instance and probably down-sizing it, I have utilized AWS toolkit in python and I have wrote a simple python daemonized script that performs these kind of tasks.
+to determine the right sizing for that particular EC2 instance and probably down-sizing it, I have utilized AWS toolkit in 
+python and I have wrote a simple python daemonized script that performs these kind of statistical calculation.
 
 - Moving infrequently accessed data to AWS Glacier instead of S3 this substantially reduces AWS cost.
 

@@ -23,7 +23,7 @@ foo function returns a list of unique random numbers within a range bounded by a
 from [1,length parameter] inclusively.
 #### How could the same result be achieved in a simpler way?
 
-By taking advantage of a data structure called "Set" which only can contain unique numbers
+By taking advantage of a data structure called "Set" which only contains unique numbers
 
 ```python
 import random
@@ -43,15 +43,19 @@ To run
 $ python question1.py -l 10
 ```
 
-## Question 2
+## Java Code Comprehension
 
 #### Explain the following code. What version of java does this need? 
 
 This code relies on stream API introduced in Java 8 
 
-## Social Network
+#### Question 2
 
-#### GroupA Social Network function
+Question 2 has the same foo function above but written in Java. I already implemented it in python above.
+
+## C. Social Network
+
+#### Question 1 : GroupA Social Network function
 
 ```python
 from typing import Mapping
@@ -86,7 +90,7 @@ $ python question1c.py
 #### Question 1 : What is the difference between a VM and a container ?
 
 VM stands for Virtual machine, it is a type of machine virtualization in which we are able to run multiple operating systems either directly 
-on bare-metal hardware or on top of a suitable guest Operating System. It requires a special type of software called "Hypervisor" that 
+on bare-metal hardware or on top of a suitable host Operating System. It requires a special type of software called "Hypervisor" that 
 is capable of managing multiple instances of full operating systems. There are two types of hypervisors, Type-1 hypervisor which is bare-metal hypervisor, 
 it is installed directly on the hardware i.e: Hyper-V; Type-2 hypervisor which requires a guest operating system i.e: Vmware Workstation and/or virtualbox from oracle.
 
@@ -94,7 +98,7 @@ it is installed directly on the hardware i.e: Hyper-V; Type-2 hypervisor which r
 Each VM, is a completely isolated environment with its own host OS + user space libraries + installed apps. VM technology was introduced 
 to better utilize system resources but it introduced redundancy , consumed more storage and many management bottlenecks for system administrators and didn't completely solve 
 the problem of scientific reproducibility (i.e. in Bioinformatics) 
-due to numerical instability among different software libraries versions. for this, operating system virtualization was introduced.
+due to numerical instability among different software libraries versions. for this, containerization was introduced.
 
 A container is a lightweight virtualization in which it requires a suitable host operating system to provide isolation as well as 
 common system capabilities (kernel). Linux has introduced the concept of namespaces which led to spawning of containers technology. 
@@ -114,8 +118,8 @@ help us as software developers to continuously test our software as it being bui
 
 cfengine: I didn't use this tool before.
 
-ansible and puppet are decentralized configuration management tools which help deploying software tools and 
-dependent system libraries across many servers and/or cloud infrastructure all at once.
+ansible and puppet are decentralized provisioning and configuration management tools which help deploying software tools and 
+system dependencies across many servers and/or cloud infrastructure all at once.
 
 I have used ansible before as it is built in python and it integrates seamlessly with our internal python systems.
 We have used it to deploy updated versions of the software and its related dependencies through a single configuration file and pushing 
@@ -128,13 +132,13 @@ From my experience, These are some of the quick wins that could reduce AWS compu
 
 -  Utilizing cost management interface to determine low-utilized EC2 instances by averaging out the peaks of hyperactivities 
 to determine the right sizing for that particular EC2 instance and probably down-sizing it, I have utilized AWS toolkit in 
-python and I have wrote a simple python daemonized script that performs these kind of statistical calculation.
+python and I have written a simple python daemonized script that performs these kind of statistical calculation.
 
-- Moving infrequently accessed data to AWS Glacier instead of S3 this substantially reduces AWS cost.
+- Moving infrequently accessed data to AWS Glacier instead of S3 this can substantially reduce AWS cost.
 
-- Use Spot instances for fault-tolerant or short computing tasks.
+- Using Spot instances for fault-tolerant or short computing tasks.
 
-I had some experiences monitoring my own AWS Cloud for one of my personal projects, I have used ganglia + Grafana to monitor and visualize my 7 cloud EC2 instances.
+I had some experiences monitoring my own AWS Cloud for some of my personal projects, I have used ganglia + Grafana to monitor and visualize my 7 cloud EC2 instances.
 
 
 ## Coding Challenge 
@@ -208,7 +212,8 @@ $ python xmlcoding.py
 
 #### Question 2: How to write a test case for the above XML task ?
 
-We will use `numpy` package and test for equality using `np.equal` coupled with `np.all` between the truth matrix (predefined as input) and the resulting matrix from the method `get_matrix_result`
+We will use `numpy` package and test for equality using `np.equal` coupled with `np.all` between the truth matrix (predefined as input) and the resulting matrix from the method `get_matrix_result` 
+in file `xmlcoding.py`
 
 for instance, something like this
 
@@ -291,9 +296,9 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y \
     python3.8 python3-pip python3.8-dev
 
-COPY requirements.txt .
+COPY docker.txt .
 
-RUN cat requirements.txt | xargs -n1 pip3 install
+RUN cat docker.txt | xargs -n1 pip3 install
 
 COPY restful.py /usr/bin/restful
 

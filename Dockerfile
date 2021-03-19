@@ -8,7 +8,7 @@ COPY docker.txt .
 
 RUN cat docker.txt | xargs -n1 pip3 install
 
-COPY ../restful.py /usr/bin/restful
+COPY restful.py /usr/bin/restful
 
 RUN chmod a+x /usr/bin/restful
 

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+name: restful-unit
+spec:
+replicas: 5
+selector:
+  matchLabels:
+    app: restful-unit
+template:
+  metadata:
+    labels:
+      app: restful-unit
+  spec:
+    containers:
+    - name: restful-unit
+      image: bioflows/restful
+      ports:
+      - containerPort: 8000
+    securityContext:
+      runAsUser: 1

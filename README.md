@@ -407,7 +407,7 @@ Exact Name search
 select * from ebi.student where student_name = 'John';
 ```
 
-Or if you `student_name` is meant to carry full names of students, then we should select using 
+Or if `student_name` is meant to carry full names of students, then we should select using 
 
 ```shell script
 select * from ebi.student where student_name LIKE 'John%'

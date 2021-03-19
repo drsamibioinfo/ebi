@@ -199,8 +199,117 @@ Instead, We can utilize some distributed solutions like Hadoop and/or Apache Spa
 we can utilize "SamplingRatio" which accepts a float between [0,1] to read parts of the file and infer its schema in chunks in case, we don't have a schema for this XML structure.
 
 - There is another manual elaborate approach to solve this problem that runs in a single computer, In my case, I would implement my own SAX  parser in python in which, we read chunks of (4) bytes from the file in each iteration 
-and saves the string in memory and concatenate it with other iterations, then we search for `<Article>` and `</Article>` and keep track of the XML nested Levels and discard the whole data in memory, 
-if we finished processing the current article
+and saves the string in memory and concatenate it with other iterations, then we select only everything between `<Article>` and `</Article>` and keep track of the XML nested Levels and discard the whole data in memory, 
+if we finished processing the current article.
+
+
+## Developing a Simple Web Service
+
+#### Question 1 : Develop a REST-like Web Service
+
+I have utilized Python Flask which is a python micro-framework for developing web and restful applications.
+
+```python
+#!/usr/bin/env python3.8
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+
+@app.route("/date", methods=['GET'])
+def get():
+    import pytz
+    from datetime import datetime
+    tz = pytz.timezone('Europe/London')
+    date_str = datetime.now(tz=tz).strftime("%a %b %d %H:%M:%S %Z %Y")
+    return jsonify({
+        "date": date_str
+    })
+
+
+if __name__ == '__main__':
+    print("Starting Restful Server running on all interfaces with port : 8000 " )
+    app.run(host="0.0.0.0", port=8000)
+```
+
+In order to run this file, all you have to do is execute the file using Python interpreter
+
+```shell script
+$ python restful.py
+```
+
+#### Question 2: Creating a Docker Image
+
+I have created a Dockerfile extending Ubuntu base Image, using the following steps:
+
+- Updated all ubuntu packages
+- Installed python3.8 and its libraries
+- Copied Requirements.txt to the image
+- Used pip3 to install all restful API application dependencies.
+- Copied the actual script as `/usr/bin/restful` onto the docker image.
+- Made it Executable.
+- I used CMD to execute the script upon booting up the container.
+
+```dockerfile
+FROM ubuntu
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends -y \
+    python3.8 python3-pip python3.8-dev
+
+COPY requirements.txt .
+
+RUN cat requirements.txt | xargs -n1 pip3 install
+
+COPY restful.py /usr/bin/restful
+
+RUN chmod a+x /usr/bin/restful
+
+CMD ["/usr/bin/restful"]
+```
+
+- I have built the image locally and tested it well.
+- Then, I have logged into `BioFlows` account which I made previously for me.
+- I created a new repository on Docker, linked my personal GitHub account to it.
+- Then, I have created a build rule with Source Type: Branch, Source: Master , Docker Tag: latest, Dockerfile location: Dockerfile, Build Caching: Enabled.
+- This build rule will allow web hooks to be triggered upon pushing events to my GitHub account in order to fire building the latest docker image.
+
+Now, If you want to test this, you can perform the following 
+
+```shell script
+$ docker run -p 8000:8000 -it bioflows/restful
+```
+
+The above command will bind port 8000/tcp in the container to port 8000/tcp in my Host OS, to enable user to request the service.
+
+Now, you can test the service easily through 
+
+```shell script
+$ curl http://localhost:8000/date
+``` 
+
+#### Question 3: Scaling Up Date Service
+
+We can scale out the previous docker container by one of the following methods
+
+- we can manually run (n) number of containers for the above image on the same server but with different range of ports on the host.
+- Then we can use a load balancer like "nginx" to distribute the load among these (n) containers by a single entry URL through nginx.
+
+The second approach, which is more scalable and fault tolerant is to use `Kubernetes` because it can monitor the health of those containers and spawn a new container 
+in case of failure. I just have started learning kubernetes, but I am creating a distributed execution environment for `Bioflows` similar to Kubernetes. 
+I can answer from a generic point of view.
+
+- Kubernetes run mainly through a master node and (n) worker nodes.
+- A Worker node, will spawn the container locally and keeps monitoring it for failure.
+- A master node is responsible for managing, scheduling and monitoring the health of the cluster.
+- `etcd` which acts as a distributed cache or `key/value` data store, keeps metadata about each node and each node has access to this service.
+- A master node through the scheduler, schedules a Pod to run on a worker node. In this pod definition, we can define the container image, define ports, 
+define the range of ports on the host...etc. We can also specify how many replicas we need for this service, which kubernetes master node will make sure that the cluster
+ stays consistent by always having these replicas up and running anywhere in the cluster.
+ - Now, Kubernetes needs to keep track of these IP addresses and their corresponding ports
+
+
+
 
 
 

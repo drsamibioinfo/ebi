@@ -2,17 +2,19 @@
 
 ### To Install
 
-1. Install miniconda from <https://docs.conda.io/en/latest/miniconda.html>
-2. Create a new local conda environment using conda.env.yml file in this repository.
+1. Install VirtualEnv `sudo apt-get install virtualenv`
+2. Create virtualenv.
 ```shell script
-$ conda env create -f conda.env.yml
+$ virtualenv --python=python3.8 ~/ebi
 ```
-3.Activate the conda environment using 
+3. Activate the virtualenv 
 ```shell script
-$ conda activate ebic
+$ source ~/ebi/bin/activate
 ```
-
-
+4. Install requirements from requirements.txt in this repository
+```shell script
+$ cat requirements.txt | xargs -n1 pip3.8 install
+```
 
 ## Question 1
 
@@ -33,6 +35,12 @@ def foo(length):
     while len(bag) < length:
         bag.add(random.randint(1,length))
     return bag
+```
+
+To run
+
+```shell script
+$ python question1.py -l 10
 ```
 
 ## Question 2
@@ -65,6 +73,12 @@ def findGroupA(network: Mapping[str,list], employer: Mapping[str, str]) -> []:
             groupA.append(member)
 
     return groupA
+```
+
+To run
+
+```shell script
+$ python question1c.py
 ```
 
 ## DevOps
@@ -184,6 +198,12 @@ def main():
 if __name__ == '__main__':
     main()
 
+```
+
+To run 
+
+```shell script
+$ python xmlcoding.py
 ```
 
 #### Question 2: How to write a test case for the above XML task ?
@@ -345,7 +365,7 @@ template:
 $ kubectl apply -f deployment.yml
 ```
 
-Now we Kubernetes will make sure that the cluster stays always consistent by having 5 replicas up and running for restful date service that we have created. 
+Now, Kubernetes will make sure that the cluster stays always consistent by having 5 replicas up and running for restful date service that we have created. 
 
 But as a user, we don't know where they will run. Moreover, Pods in kubernetes are ephemeral, meaning that they are not permanent objects, they can be destroyed and re-created.
 

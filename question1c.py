@@ -19,8 +19,7 @@ employers = {
 from typing import Mapping
 
 
-def findGroupA(network: Mapping[str,list], employer: Mapping[str, str]) -> []:
-
+def findGroupA(network: Mapping[str, list], employer: Mapping[str, str]) -> []:
     if not isinstance(network, dict) or not isinstance(employer, dict):
         raise Exception("network and employer should be python dictionaries")
     if not set(network.keys()) == set(employer.keys()):
@@ -35,3 +34,11 @@ def findGroupA(network: Mapping[str,list], employer: Mapping[str, str]) -> []:
             groupA.append(member)
 
     return groupA
+
+
+def main():
+    members = findGroupA(network, employers)
+    print(members)
+
+if __name__ == '__main__':
+    main()

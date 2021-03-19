@@ -401,10 +401,18 @@ Now, we can communicate with our 5 Pods replicas through a single service-name "
 ## F. SQL and Databases
 
 #### Get All students with name John
+Exact Name search 
 
 ```sql
 select * from ebi.student where student_name = 'John';
 ```
+
+Or if you `student_name` is meant to carry full names of students, then we should select using 
+
+```shell script
+select * from ebi.student where student_name LIKE 'John%'
+```
+
 
 #### List the names and IDs of all students who have not appeared in Maths test.
 

@@ -1,5 +1,19 @@
 # EBI Challenges
 
+### To Install
+
+1. Install miniconda from <https://docs.conda.io/en/latest/miniconda.html>
+2. Create a new local conda environment using conda.env.yml file in this repository.
+```shell script
+$ conda env create -f conda.env.yml
+```
+3.Activate the conda environment using 
+```shell script
+$ conda activate ebic
+```
+
+
+
 ## Question 1
 
 #### what does the following python code do ?
@@ -379,6 +393,62 @@ Order by s.student_id
 #### Question 3 
 
 Yes, we can create an index over the student_name in MySQL database to speed up the searching process. 
+
+#### Question 4
+
+If I  was asked to choose the best option for the Student-Scores MySQL database above, Graph database is not the best option, 
+instead, we can use Document oriented data store, something like MongoDB.
+We can get rid of Scores table altogether and keep only "Student" as a collection in MongoDB and have The student scores as nested array of objects within each student JSON Document.
+
+Something like ....
+
+```json
+{
+  "id": 1,
+  "student_name": "John",
+  "scores": [
+    {
+      "subject_name" : "Maths",
+      "score" : 50
+    },
+    {
+      "subject_name" : "Biology",
+      "score" : 100
+    }
+  ]
+}
+```
+
+I have good experience with Graph databases As I have used it twice in two different projects..
+
+1. The first project, was in Social Analytics, we modelled tweets,friends,followers...etc as a graph using Apache Storm as a distributed data platform for massive parallel processing.
+we used one topology containing one `spout` to get real time data from GNIP twitter data source, with many intermediate `bolts` to process the data and transform the data at the end 
+into a graph using Neo4J Java Library.
+
+2. The second project, I used Neo4J as a graph database to model the relationship between certain variants, genes and their protein isoforms (In my current role)
+
+
+**The Data model for the second project was as follows**:
+
+- Each gene can have many direct connections to  canonical protein isoforms to represent the different states of alternative splicing products for that particular gene in normal state.
+- Each variant contains REF,ALT,CHR, pathogenicity and other annotated VCF attributes while the edge between a variant and a gene carries the genomic loci as "chr1:start-END", a single variant
+ can have a single connection to a gene. while a gene can have many edges to many variants....
+- Each variant can also have a direct connection with a protein and a gene, to represent a protein product caused by the presence of the variant (in diseased state).
+
+We first loaded the entire human gene-protein regulatory network into Neo4J.
+Then, The variants data for this project was the public data set of 1092 VCF file from 1k UK genome project, we have sorted the VCFs by the genomic loci and parallelized the processing, 
+modelling and saving the data into Neo4J through 25 distributed transformers. Each transformer processes only a single chromosome (22 somatic, X, Y and Mitochondrial chromosome)...
+
+My involvement in this project, I was the core and the only researcher working on this project.
+
+
+
+
+
+
+
+
+
 
 
 

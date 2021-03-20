@@ -130,6 +130,7 @@ that to all running cloud EC2 instances all at once.
 
 From my experience, These are some of the quick wins that could reduce AWS compute costs substantially.
 
+
 -  Utilizing cost management interface to determine low-utilized EC2 instances by averaging out the peaks of hyperactivities 
 to determine the right sizing for that particular EC2 instance and probably down-sizing it, I have utilized AWS toolkit in 
 python and I have written a simple python daemonized script that performs these kind of statistical calculation.
@@ -341,27 +342,27 @@ in case of failure.
  The following Kubernetes Deployment file should run 5 replicated date service on a kubernetes cluster
  
  ```yaml
-apiVersion: apps/v1
 kind: Deployment
+apiVersion: apps/v1
 metadata:
-name: restful-unit
+  name: restful-dep
+  labels:
+    app: restful-dep
 spec:
-replicas: 5
-selector:
-  matchLabels:
-    app: restful-unit
-template:
-  metadata:
-    labels:
-      app: restful-unit
-  spec:
-    containers:
-    - name: restful-unit
-      image: bioflows/restful
-      ports:
-      - containerPort: 8000
-    securityContext:
-      runAsUser: 1
+  replicas: 5
+  selector:
+    matchLabels:
+      app: restful-dep
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: restful-dep
+    spec:
+      containers:
+        - name: restful
+          image: bioflows/restful
+      restartPolicy: Always
 ```
  
  To apply the following deployment , we should run the following command
@@ -374,7 +375,7 @@ Now, Kubernetes will make sure that the cluster stays always consistent by havin
 
 But as a user, we don't know where they will run. Moreover, Pods in kubernetes are ephemeral, meaning that they are not permanent objects, they can be destroyed and re-created.
 
-For this we need to define a service with a selector to our pods...
+For this we need to define a service with a selector to our deployment...
 
 ```yaml
 apiVersion: v1
@@ -382,8 +383,9 @@ kind: Service
 metadata:
   name: restful-service
 spec:
+  type: LoadBalancer
   selector:
-    app: restful-service
+    app: restful-dep
   ports:
     - protocol: TCP
       port: 80
@@ -396,7 +398,7 @@ Then , we apply that using kubectl similar to the above command..
 $ kubectl apply -f service.yml
 ```
 
-Now, we can communicate with our 5 Pods replicas through a single service-name "restful-service" and a port (80). irrespective of where these pods are in the cluster..
+Now, we can communicate with our 5 Pods replicas through a single service-name "restful-service" with its external-IP and a port (80). irrespective of where these pods are in the cluster..
 
 ## F. SQL and Databases
 

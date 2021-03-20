@@ -3,8 +3,9 @@ kind: Service
 metadata:
   name: restful-service
 spec:
+  type: LoadBalancer
   selector:
-    app: restful-service
+    app: restful-dep
   ports:
     - protocol: TCP
       port: 80
